@@ -42,26 +42,25 @@ plt.title('Correlation Matrix')
 plt.savefig('correlation_heatmap.png')
 plt.close()
 
-# Prepare data for regression (predict petal.length using sepal.length and sepal.width)
+# Define the regression function
+def train_model(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+    cv_scores = cross_val_score(model, X, y, cv=5)
+    return X_test, y_test, y_pred, mse, r2, cv_scores
+
+# Prepare data and train model for petal.width
 X = df[['sepal.length', 'sepal.width']]
 y = df['petal.width']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_test, y_test, y_pred, mse, r2, cv_scores = train_model(X, y)
 
-# Train model
-model = LinearRegression()
-model.fit(X_train, y_train)
-
-# Predictions
-y_pred = model.predict(X_test)
-
-# Evaluate
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+# Evaluate and print
 print(f"Mean Squared Error: {mse}")
 print(f"R-squared Score: {r2}")
-
-# Cross-validation
-cv_scores = cross_val_score(model, X, y, cv=5)
 print(f"Cross-validation scores: {cv_scores}")
 print(f"Average CV score: {cv_scores.mean()} (+/- {cv_scores.std() * 2})")
 
@@ -70,8 +69,8 @@ plt.figure(figsize=(10, 6))
 plt.scatter(X_test['sepal.length'], y_test, color='blue', label='Actual')
 plt.plot(X_test['sepal.length'], y_pred, color='red', label='Predicted')
 plt.xlabel('Sepal Length')
-plt.ylabel('Petal Length')
-plt.title('Linear Regression: Sepal Length and Width vs Petal Length')
+plt.ylabel('Petal Width')
+plt.title('Linear Regression: Sepal Length and Width vs Petal Width')
 plt.legend()
 plt.savefig('regression_plot.png')
 plt.close()
@@ -81,7 +80,7 @@ plt.figure(figsize=(10, 6))
 residuals = y_test - y_pred
 plt.scatter(y_test, residuals, color='green')
 plt.axhline(y=0, color='r', linestyle='--')
-plt.xlabel('Actual Petal Length')
+plt.xlabel('Actual Petal Width')
 plt.ylabel('Residuals')
 plt.title('Residual Plot')
 plt.savefig('residuals.png')
