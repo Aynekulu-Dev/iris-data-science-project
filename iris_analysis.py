@@ -9,6 +9,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import PolynomialFeatures
+from mpl_toolkits.mplot3d import Axes3D
 
 # Load the dataset
 df = pd.read_csv('iris.csv')
@@ -88,6 +89,18 @@ plt.xlabel('Actual Petal Width')
 plt.ylabel('Residuals')
 plt.title('Residual Plot')
 plt.savefig('residuals.png')
+plt.close()
+# 3D scatter plot
+fig = plt.figure(figsize=(10, 6))
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(X_test[:, 0], X_test[:, 1], y_test, c='blue', label='Actual')
+ax.plot(X_test[:, 0], X_test[:, 1], y_pred, c='red', label='Predicted')
+ax.set_xlabel('Sepal Length')
+ax.set_ylabel('Sepal Width')
+ax.set_zlabel('Petal Width')
+plt.title('3D Polynomial Regression')
+plt.legend()
+plt.savefig('3d_plot.png')
 plt.close()
 
 print("Visualizations saved as pairplot.png, boxplot_sepal_length.png, correlation_heatmap.png, regression_plot.png, and residuals.png")
