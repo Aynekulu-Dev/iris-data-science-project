@@ -43,6 +43,12 @@ sns.heatmap(numeric_df.corr(), annot=True, cmap='coolwarm')
 plt.title('Correlation Matrix')
 plt.savefig('correlation_heatmap.png')
 plt.close()
+np.random.seed(42)
+n_samples = 50
+synthetic_X = np.random.rand(n_samples, 2) * 4 + 4  # Random sepal lengths and widths
+synthetic_y = 0.5 * synthetic_X[:, 0] + 0.3 * synthetic_X[:, 1] + np.random.randn(n_samples) * 0.1
+synthetic_df = pd.DataFrame(synthetic_X, columns=['sepal.length', 'sepal.width'])
+synthetic_y = pd.Series(synthetic_y, name='petal.width')
 
 # Define the regression function (unchanged)
 def train_model(X, y):
