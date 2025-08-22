@@ -57,7 +57,7 @@ def train_model(X, y):
 # Prepare data and apply polynomial transformation
 X = df[['sepal.length', 'sepal.width']]
 y = df['petal.width']
-poly = PolynomialFeatures(degree=2)
+poly = PolynomialFeatures(degree=3)
 X_poly = poly.fit_transform(X)
 X_test, y_test, y_pred, mse, r2, cv_scores = train_model(X_poly, y)
 
