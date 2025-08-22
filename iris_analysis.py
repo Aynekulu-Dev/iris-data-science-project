@@ -43,6 +43,7 @@ sns.heatmap(numeric_df.corr(), annot=True, cmap='coolwarm')
 plt.title('Correlation Matrix')
 plt.savefig('correlation_heatmap.png')
 plt.close()
+
 np.random.seed(42)
 n_samples = 50
 synthetic_X = np.random.rand(n_samples, 2) * 4 + 4  # Random sepal lengths and widths
@@ -50,7 +51,7 @@ synthetic_y = 0.5 * synthetic_X[:, 0] + 0.3 * synthetic_X[:, 1] + np.random.rand
 synthetic_df = pd.DataFrame(synthetic_X, columns=['sepal.length', 'sepal.width'])
 synthetic_y = pd.Series(synthetic_y, name='petal.width')
 
-# Define the regression function (unchanged)
+# Define the regression function
 def train_model(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     model = LinearRegression()
@@ -74,9 +75,8 @@ print(f"R-squared Score: {r2}")
 print(f"Cross-validation scores: {cv_scores}")
 print(f"Average CV score: {cv_scores.mean()} (+/- {cv_scores.std() * 2})")
 
-# Visualize regression (adjust for polynomial features)
+# Visualize regression
 plt.figure(figsize=(10, 6))
-# Use the first original feature (sepal.length) for a 2D approximation
 plt.scatter(X_test[:, 0], y_test, color='blue', label='Actual')
 plt.plot(X_test[:, 0], y_pred, color='red', label='Predicted')
 plt.xlabel('Sepal Length (Polynomial Approximation)')
@@ -96,17 +96,22 @@ plt.ylabel('Residuals')
 plt.title('Residual Plot')
 plt.savefig('residuals.png')
 plt.close()
+
 # 3D scatter plot
 fig = plt.figure(figsize=(10, 6))
 ax = fig.add_subplot(111, projection='3d')
 ax.scatter(X_test[:, 0], X_test[:, 1], y_test, c='blue', label='Actual')
 ax.plot(X_test[:, 0], X_test[:, 1], y_pred, c='red', label='Predicted')
 ax.set_xlabel('Sepal Length')
-ax.set_ylabel('Sepal Width')
+ax.set_ylabel('Seapal Width')
 ax.set_zlabel('Petal Width')
 plt.title('3D Polynomial Regression')
 plt.legend()
 plt.savefig('3d_plot.png')
 plt.close()
+
+# Train model on synthetic data
+X_test_synth, y_test_synth, y_pred_synth, mse_synth, r2_synth, cv_scores_synth = train_model(poly.fit_transform(synthetic_df), synthetic_y)
+print(f"Synthetic Data - MSE: {mse_synth}, R2: {r2_synth}")
 
 print("Visualizations saved as pairplot.png, boxplot_sepal_length.png, correlation_heatmap.png, regression_plot.png, and residuals.png")
